@@ -1,0 +1,770 @@
+/* Visual admin editor – only applies when body.admin-edit-mode */
+
+body.admin-edit-mode #page-main section[data-section-id] {
+  position: relative;
+  outline: 1px dashed rgba(0, 120, 215, 0.4);
+  outline-offset: -1px;
+  transition: outline-color 0.15s ease;
+}
+
+body.admin-edit-mode #page-main section[data-section-id]:hover {
+  outline-color: rgba(0, 120, 215, 0.7);
+}
+
+/* Section hover label + actions */
+.admin-section-actions {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  font-size: 12px;
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+#page-main section[data-section-id]:hover .admin-section-actions {
+  opacity: 1;
+}
+
+.admin-section-label {
+  margin-right: 4px;
+}
+
+.admin-section-btns {
+  display: flex;
+  gap: 2px;
+}
+
+.admin-btn {
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-btn:hover {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+.admin-btn-delete:hover {
+  background: rgba(200, 60, 60, 0.9);
+}
+
+/* Image wrap + menu */
+.admin-image-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.admin-image-wrap:hover .admin-image-menu {
+  opacity: 1;
+}
+
+.admin-image-menu {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 6px 8px;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.admin-btn-replace-img,
+.admin-btn-remove-img {
+  padding: 4px 10px;
+  width: auto;
+  height: auto;
+  font-size: 12px;
+}
+
+/* Floating toolbar */
+.admin-toolbar {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  background: #1a1a1a;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.admin-toolbar-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-toolbar-title {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.85;
+  margin-right: 8px;
+}
+
+.admin-toolbar-btn {
+  padding: 8px 14px;
+  border: none;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 13px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.admin-toolbar-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.admin-toolbar-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.admin-toolbar-btn-primary {
+  background: #0078d4;
+}
+
+.admin-toolbar-btn-primary:hover:not(:disabled) {
+  background: #106ebe;
+}
+
+/* ContentEditable focus */
+body.admin-edit-mode [data-content-field][contenteditable="true"]:focus {
+  outline: 2px solid rgba(0, 120, 215, 0.6);
+  outline-offset: 2px;
+}
+
+/* Add section modal */
+.admin-modal-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.5);
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* Nav modals (Add menu / Add submenu) above context menu and toolbar */
+.admin-modal-overlay--nav {
+  z-index: 100003;
+}
+
+.admin-modal {
+  background: #fff;
+  color: #1a1a1a;
+  padding: 24px;
+  border-radius: 12px;
+  min-width: 320px;
+  max-width: 90vw;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.admin-modal h3 {
+  margin: 0 0 16px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.admin-modal-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.admin-modal-option {
+  padding: 12px 16px;
+  text-align: left;
+  border: 1px solid #e0e0e0;
+  background: #fff;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.admin-modal-option:hover {
+  background: #f5f5f5;
+  border-color: #ccc;
+}
+
+.admin-modal-close {
+  background: #eee !important;
+  color: #1a1a1a !important;
+  width: 100%;
+}
+
+.admin-modal-close:hover {
+  background: #e0e0e0 !important;
+}
+
+/* ========== Ghost placeholders (same-size add/replace/remove) ========== */
+
+/* Image overlay – full cover, same size as image */
+.admin-image-wrap .admin-image-menu {
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* Gallery / media slot overlay (Replace + Delete on background-image divs) */
+.admin-gallery-slot-overlay,
+.gallery-media .admin-image-menu,
+.hero-media .admin-image-menu {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.gallery-media:hover .admin-gallery-slot-overlay,
+.gallery-media:hover .admin-image-menu,
+.hero-media:hover .admin-gallery-slot-overlay,
+.material-media:hover .admin-gallery-slot-overlay {
+  opacity: 1;
+}
+
+/* Ghost placeholder – add image (same size as sibling images) */
+.ve-ghost,
+.admin-ghost-add-image {
+  position: relative;
+  min-height: 80px;
+  border: 2px dashed rgba(198, 167, 94, 0.6);
+  border-radius: 8px;
+  background: rgba(198, 167, 94, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.ve-ghost:hover,
+.admin-ghost-add-image:hover {
+  background: rgba(198, 167, 94, 0.14);
+  border-color: rgba(198, 167, 94, 0.9);
+}
+
+.ve-ghost-plus,
+.admin-ghost-plus {
+  width: 40px;
+  height: 40px;
+  border: 2px solid rgba(198, 167, 94, 0.7);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: rgba(198, 167, 94, 0.9);
+  line-height: 1;
+}
+
+.admin-ghost-label {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.8);
+  white-space: nowrap;
+}
+
+/* Empty image slot – ghost same dimensions as typical image block */
+.admin-empty-image-slot {
+  width: 100%;
+  aspect-ratio: 1;
+  max-width: 400px;
+  border: 2px dashed rgba(198, 167, 94, 0.6);
+  border-radius: 12px;
+  background: rgba(198, 167, 94, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.admin-empty-image-slot:hover {
+  background: rgba(198, 167, 94, 0.14);
+  border-color: rgba(198, 167, 94, 0.9);
+}
+
+.admin-empty-image-slot .admin-ghost-plus {
+  width: 48px;
+  height: 48px;
+  font-size: 28px;
+}
+
+/* Editable text – subtle focus ring */
+body.admin-edit-mode .ve-editable {
+  outline: none;
+  border-radius: 2px;
+  padding: 2px 4px;
+  margin: -2px -4px;
+}
+
+body.admin-edit-mode .ve-editable:focus {
+  background: rgba(198, 167, 94, 0.1);
+  box-shadow: 0 0 0 1px rgba(198, 167, 94, 0.4);
+}
+
+/* Text block wrapper with delete */
+.ve-text-wrap {
+  position: relative;
+  min-height: 1.5em;
+}
+
+.ve-text-actions {
+  position: absolute;
+  top: -26px;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.ve-text-wrap:hover .ve-text-actions {
+  opacity: 1;
+}
+
+.ve-text-actions button {
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  background: #1a1a1a;
+  color: #fff;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.ve-text-actions button:hover {
+  background: #333;
+}
+
+.ve-text-actions .ve-btn-format {
+  background: #2a5a8a;
+}
+.ve-text-actions .ve-btn-format:hover {
+  background: #3a6a9a;
+}
+.ve-text-actions .ve-btn-delete {
+  background: #8b2a2a;
+}
+.ve-text-actions .ve-btn-delete:hover {
+  background: #a33;
+}
+
+/* Text format modal */
+.admin-modal--format .form-group label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+}
+
+/* Add block placeholder between content */
+.admin-add-block {
+  border: 2px dashed rgba(198, 167, 94, 0.5);
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  background: rgba(198, 167, 94, 0.06);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  margin: 12px 0;
+}
+
+.admin-add-block:hover {
+  background: rgba(198, 167, 94, 0.12);
+  border-color: rgba(198, 167, 94, 0.8);
+}
+
+.admin-add-block .admin-ghost-plus {
+  margin: 0 auto 8px;
+}
+
+.admin-add-block span {
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+/* Ghost in grids: same size as grid items */
+.materials-grid .admin-ghost-add-image,
+.gallery-grid .admin-ghost-add-image {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 180px;
+}
+
+.logo-strip .admin-ghost-add-image {
+  flex-shrink: 0;
+}
+
+/* Section bar at top (ghost-style) */
+.ve-section-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 10px;
+  background: rgba(26, 26, 26, 0.92);
+  color: #fff;
+  font-size: 12px;
+  opacity: 0;
+  transform: translateY(-100%);
+  transition: opacity 0.2s, transform 0.2s;
+  border-radius: 8px 8px 0 0;
+  margin: 0 12px;
+}
+
+.ve-section-wrap:hover .ve-section-bar {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+body.admin-edit-mode .ve-section-bar {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ve-section-bar button {
+  padding: 4px 10px;
+  border: none;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+.ve-section-bar button:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.ve-section-drag-handle {
+  cursor: grab;
+  padding: 4px 8px;
+  margin-right: 4px;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 14px;
+  user-select: none;
+  border-radius: 4px;
+}
+
+.ve-section-drag-handle:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.ve-section-bar-draggable:active .ve-section-drag-handle {
+  cursor: grabbing;
+}
+
+.ve-section-wrap.ve-section-dragging {
+  opacity: 0.6;
+}
+
+.ve-section-wrap.ve-section-drop-target {
+  outline: 2px solid #c6a75e;
+  outline-offset: 2px;
+}
+
+/* Gold accent for primary actions */
+.admin-toolbar-btn-primary {
+  background: #c6a75e;
+  color: #111;
+}
+
+.admin-toolbar-btn-primary:hover:not(:disabled) {
+  background: #d4b86a;
+}
+
+/* Nav right-click context menu (edit mode) */
+.admin-nav-context-menu {
+  position: fixed;
+  z-index: 100002;
+  min-width: 200px;
+  padding: 6px 0;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  font-size: 13px;
+}
+
+.admin-nav-context-menu button {
+  display: block;
+  width: 100%;
+  padding: 10px 16px;
+  border: none;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  color: #111;
+}
+
+.admin-nav-context-menu button:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.admin-nav-ctx-edit:hover {
+  color: #0a5;
+  background: rgba(0, 160, 80, 0.08);
+}
+
+.admin-nav-ctx-delete:hover {
+  color: #c00;
+  background: rgba(200, 0, 0, 0.08);
+}
+
+.admin-nav-ctx-add-submenu:hover {
+  color: #06c;
+  background: rgba(0, 100, 200, 0.08);
+}
+
+/* Add new menu button in header – right side (edit mode only) */
+.admin-add-menu-btn {
+  display: none;
+}
+body.admin-edit-mode .admin-add-menu-btn {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 6px 12px;
+  margin-right: 8px;
+  font-size: 12px;
+  color: #666;
+  background: rgba(0, 0, 0, 0.06);
+  border: 1px dashed #999;
+  border-radius: 6px;
+  cursor: pointer;
+  white-space: nowrap;
+  position: relative;
+  z-index: 11;
+  pointer-events: auto;
+  order: -1;
+}
+body.admin-edit-mode .admin-add-menu-btn:hover {
+  color: #333;
+  background: rgba(0, 0, 0, 0.08);
+  border-color: #666;
+}
+
+/* Header logo edit (edit mode only) */
+body.admin-edit-mode .admin-logo-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+body.admin-edit-mode .admin-logo-edit-overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+}
+body.admin-edit-mode .admin-logo-wrap:hover .admin-logo-edit-overlay {
+  opacity: 1;
+  pointer-events: auto;
+}
+.admin-logo-edit-label {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.9);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.admin-logo-edit-overlay .admin-btn {
+  padding: 6px 12px;
+  font-size: 12px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.admin-logo-edit-overlay .admin-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+.admin-logo-edit-overlay .admin-btn-reset-logo {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+body.admin-edit-mode .brand .brand-logo-img,
+body.admin-edit-mode .admin-logo-wrap .brand img {
+  max-height: 48px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Blog index: Rename, Edit, Delete, Add (edit mode) */
+.blog-card {
+  position: relative;
+}
+
+.blog-card-actions {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 10;
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.blog-card:hover .blog-card-actions {
+  opacity: 1;
+}
+
+.blog-card-btn {
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.blog-card-btn:hover {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.blog-card-delete:hover {
+  background: #c00;
+}
+
+.blog-add-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 140px;
+  border: 2px dashed rgba(198, 167, 94, 0.6);
+  background: rgba(198, 167, 94, 0.06);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.blog-add-card:hover {
+  background: rgba(198, 167, 94, 0.12);
+  border-color: rgba(198, 167, 94, 0.9);
+}
+
+.blog-add-card-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 13px;
+}
+
+.blog-add-card .admin-ghost-plus {
+  width: 40px;
+  height: 40px;
+  font-size: 24px;
+  border: 2px solid rgba(198, 167, 94, 0.7);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(198, 167, 94, 0.9);
+}
+
+/* Contact section: "Change map location" above the map (edit mode) */
+.admin-map-edit-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  padding: 10px 12px;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px 8px 0 0;
+}
+
+.map-placeholder {
+  position: relative;
+}
+
+.admin-map-edit-btn {
+  padding: 8px 16px;
+  font-size: 13px;
+  background: #c6a75e;
+  color: #111;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.admin-map-edit-btn:hover {
+  background: #d4b86a;
+}
