@@ -1,0 +1,358 @@
+/* Visual editor – ghost placeholders, toolbar, section controls. Loaded only in edit mode. */
+
+/* Floating toolbar (bottom center, Webflow-style) */
+.ve-toolbar {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: #1a1a1a;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+  font-size: 14px;
+  color: #fff;
+}
+
+.ve-toolbar button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.2s;
+}
+
+.ve-toolbar button:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+.ve-toolbar button.ve-save {
+  background: #c6a75e;
+  color: #111;
+}
+
+.ve-toolbar button.ve-save:hover {
+  background: #d4b86a;
+}
+
+.ve-toolbar button.ve-exit {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
+/* Section wrapper when in edit mode */
+.ve-section-wrap {
+  position: relative;
+  outline: 1px dashed transparent;
+  outline-offset: -1px;
+  transition: outline-color 0.2s;
+}
+
+.ve-section-wrap:hover {
+  outline-color: rgba(198, 167, 94, 0.5);
+}
+
+/* Section toolbar (appears on hover at top of section) */
+.ve-section-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 10px;
+  background: rgba(26, 26, 26, 0.92);
+  color: #fff;
+  font-size: 12px;
+  opacity: 0;
+  transform: translateY(-100%);
+  transition: opacity 0.2s, transform 0.2s;
+  border-radius: 8px 8px 0 0;
+  margin: 0 12px;
+}
+
+.ve-section-wrap:hover .ve-section-bar {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ve-section-bar button {
+  padding: 4px 10px;
+  border: none;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  cursor: pointer;
+  font-size: 11px;
+}
+
+.ve-section-bar button:hover {
+  background: rgba(255,255,255,0.25);
+}
+
+/* Ghost placeholder – same size as image/text block, dashed border, + icon */
+.ve-ghost {
+  position: relative;
+  min-height: 80px;
+  border: 2px dashed rgba(198, 167, 94, 0.6);
+  border-radius: 8px;
+  background: rgba(198, 167, 94, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.ve-ghost:hover {
+  background: rgba(198, 167, 94, 0.12);
+  border-color: rgba(198, 167, 94, 0.9);
+}
+
+.ve-ghost-plus {
+  width: 40px;
+  height: 40px;
+  border: 2px solid rgba(198, 167, 94, 0.7);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: rgba(198, 167, 94, 0.9);
+  line-height: 1;
+}
+
+.ve-ghost-label {
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  color: rgba(0,0,0,0.5);
+  white-space: nowrap;
+}
+
+/* Image wrapper – keeps exact size of image, overlay on hover */
+.ve-image-wrap {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+}
+
+.ve-image-wrap .ve-image-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  opacity: 0;
+  transition: opacity 0.2s;
+  border-radius: inherit;
+}
+
+.ve-image-wrap:hover .ve-image-overlay {
+  opacity: 1;
+}
+
+.ve-image-overlay button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  background: #fff;
+  color: #111;
+  font-size: 12px;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.ve-image-overlay button:hover {
+  background: #f0f0f0;
+}
+
+.ve-image-overlay button.ve-remove {
+  background: #c00;
+  color: #fff;
+}
+
+.ve-image-overlay button.ve-remove:hover {
+  background: #a00;
+}
+
+/* Empty image slot – ghost same size as typical image block */
+.ve-empty-image {
+  width: 100%;
+  aspect-ratio: 1;
+  max-width: 400px;
+  border: 2px dashed rgba(198, 167, 94, 0.6);
+  border-radius: 12px;
+  background: rgba(198, 167, 94, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.ve-empty-image:hover {
+  background: rgba(198, 167, 94, 0.14);
+  border-color: rgba(198, 167, 94, 0.9);
+}
+
+.ve-empty-image .ve-ghost-plus {
+  width: 48px;
+  height: 48px;
+  font-size: 28px;
+}
+
+.ve-empty-image .ve-ghost-label {
+  position: static;
+  transform: none;
+  font-size: 12px;
+  color: rgba(0,0,0,0.5);
+}
+
+/* Editable text – subtle outline on focus */
+.ve-editable {
+  outline: none;
+  border-radius: 2px;
+  padding: 2px 4px;
+  margin: -2px -4px;
+}
+
+.ve-editable:focus {
+  background: rgba(198, 167, 94, 0.08);
+  box-shadow: 0 0 0 1px rgba(198, 167, 94, 0.3);
+}
+
+/* Inline delete chip for text blocks */
+.ve-text-actions {
+  position: absolute;
+  top: -28px;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  gap: 4px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.ve-text-wrap:hover .ve-text-actions {
+  opacity: 1;
+}
+
+.ve-text-wrap {
+  position: relative;
+  min-height: 1.5em;
+}
+
+.ve-text-actions button {
+  padding: 4px 8px;
+  border: none;
+  border-radius: 4px;
+  background: #1a1a1a;
+  color: #fff;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.ve-text-actions button:hover {
+  background: #333;
+}
+
+/* Add block / Add section placeholder */
+.ve-add-block {
+  border: 2px dashed rgba(198, 167, 94, 0.5);
+  border-radius: 8px;
+  padding: 24px;
+  text-align: center;
+  background: rgba(198, 167, 94, 0.05);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+  margin: 12px 0;
+}
+
+.ve-add-block:hover {
+  background: rgba(198, 167, 94, 0.12);
+  border-color: rgba(198, 167, 94, 0.8);
+}
+
+.ve-add-block .ve-ghost-plus {
+  margin: 0 auto 8px;
+}
+
+.ve-add-block span {
+  font-size: 13px;
+  color: rgba(0,0,0,0.5);
+}
+
+/* Modal for add section / block type */
+.ve-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 100001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.ve-modal {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: 0 24px 48px rgba(0,0,0,0.2);
+}
+
+.ve-modal h3 {
+  margin: 0 0 16px;
+  font-size: 18px;
+}
+
+.ve-modal-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ve-modal-buttons button {
+  padding: 10px 16px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.ve-modal-buttons button:hover {
+  background: #f5f5f5;
+  border-color: #c6a75e;
+}
+
+/* Hide file input used for image upload */
+.ve-file-input {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}

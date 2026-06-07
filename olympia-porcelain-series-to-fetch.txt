@@ -1,0 +1,40 @@
+# Porcelain series from Olympia index (one per line). URL: .../en/{name}-series.html
+# Skip: quebec, aequa, antikas (already in site), apini (removed).
+# From index page 1:
+arkipro
+arkistone
+artwork
+ashima
+astrum
+baita
+beach
+biel
+blend
+# More series (add as discovered):
+air
+allure
+atlantis
+clay
+concrete
+design-industry
+district
+essential
+evolve
+everlast
+flora
+gem
+gemme
+italian-icon
+kerlite
+micron
+muse
+oxford
+oxy
+palais
+pietra-di-stazzema
+portland
+rowan
+spectra
+tactile
+techstone
+the-room
